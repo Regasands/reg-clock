@@ -4,11 +4,11 @@ import psycopg2
 def connect_to_bd():
     try:
         con = psycopg2.connect(
-            dbname = 'clock',
-            user = 'postgres',
-            password = '92349234Regqwe!',
-            host = 'localhost',
-            port = '5432',
+            dbname = DataBd.DBNAME,
+            user = DataBd.USER,
+            password = DataBd.PASSWORD,
+            host = DataBd.HOST,
+            port = DataBd.PORT,
         )
         return con
     except Exception as e:

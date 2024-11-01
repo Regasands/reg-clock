@@ -30,7 +30,7 @@ class CustomLayoutMainWidget(ParentLayout):
         grid_layout = QGridLayout()
         grid_layout.setHorizontalSpacing(10)
         grid_layout.setVerticalSpacing(40)
-        grid_layout.setContentsMargins(40, 40, 40, 40)
+        grid_layout.setContentsMargins(20, 20, 20, 20)
         grid_layout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
         return grid_layout
 
@@ -72,4 +72,36 @@ class CustomLayoutAddTimeZone(ParentLayout):
 
 
         
-        
+class CustomLayoutProfile(ParentLayout):
+    def __init__(self):
+        super().__init__()
+        self.scrol = QScrollArea()
+        self.inner_layout = self.create_inner_layout()
+        self.layout_from_top_button = self.create_grid_button_add_top()
+
+    def create_grid_button_add_top(self):
+        button_box_layout = QGridLayout()
+        button_box_layout.setHorizontalSpacing(50)
+        button_box_layout.setVerticalSpacing(20)
+        button_box_layout.setContentsMargins(10, 10, 10, 10)
+        button_box_layout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight)
+        return button_box_layout
+
+    def create_inner_layout(self):
+        inner_layout = QGridLayout()
+        inner_layout.setHorizontalSpacing(5)
+        inner_layout.setVerticalSpacing(10)
+        inner_layout.setContentsMargins(10, 10, 10, 10)
+        return inner_layout
+
+    def setup_main_layout(self):
+        widget = QWidget()
+        widget.setStyleSheet('border: 1px solid black')
+        widget.setLayout(self.inner_layout)
+        self.scrol.setWidgetResizable(True)
+        self.scrol.setWidget(widget)
+        main_layout = QVBoxLayout()
+        main_layout.addLayout(self.layout_from_top_button)
+        main_layout.addWidget(self.scrol)
+        main_layout.addLayout(self.button_layout_home_nav)
+        return main_layout

@@ -33,6 +33,9 @@ class Login(QDialog):
         uic.loadUi('project/Layout/ui/login_window.ui', self)
         self.enter_password.setEchoMode(QLineEdit.EchoMode.Password)
         self.register_button.clicked.connect(self.register)
+        self.buttonBox_2.accepted.connect(self.accept)  # Обработка кнопки "Вход"
+        self.buttonBox_2.rejected.connect(self.reject)
+
 
     def register(self):
         text = ''
@@ -42,7 +45,7 @@ class Login(QDialog):
             if register_window.exec() == QDialog.DialogCode.Accepted:
                 try:
                     login, password = register_window.get_login_password_register()
-                    if len(login) < 10 and len(password) > 6:
+                    if len(login) < 15 and len(password) > 6:
                         a = DatabaseUser()
                         a.create_user(login, password)
                         break
@@ -53,6 +56,7 @@ class Login(QDialog):
                     print(e)
             else:
                 break
+
     def get_login_password(self):
         return self.enter_login.text(),  self.enter_password.text()
 

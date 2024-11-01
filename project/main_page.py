@@ -4,7 +4,7 @@ from datetime import datetime, timezone, UTC, timedelta
 
 from PyQt6 import uic
 from PyQt6.QtWidgets import QWidget, QApplication, QPushButton, QLineEdit, QLabel, QCheckBox, QStackedWidget, QLayout, QStackedWidget
-from PyQt6.QtWidgets import QMainWindow, QInputDialog
+from PyQt6.QtWidgets import QMainWindow, QInputDialog, QDialog
 from PyQt6.QtGui import QPainter
 from PyQt6.QtCore import QSettings, Qt, QTimer
 
@@ -13,7 +13,7 @@ from project.dialogs import Login, AddTimeZone
 from project.draw import custom_widget
 from project.layout.custom_layout_widget.layout import CustomLayoutMainWidget
 from config.decorators import format_date
-
+from project.to_main_window_for_friends import MyProfile
 
 class CustomApplication(QApplication):
     '''
@@ -25,17 +25,17 @@ class CustomApplication(QApplication):
         setting = QSettings('23', "Reg'clock")
         login = setting.value('username', None)
         password = setting.value('password', None)
+        login, password = None, None
 
         while True:
             if not login or not password:
                     login_window = Login()
-                    if login_window.exec():
-                        login, password = Login.get_login_password()
+                    if login_window.exec() == QDialog.DialogCode.Accepted:
+                        login, password = login_window.get_login_password()
                     else:
                         sys.exit()
 
             try:
-
                 self.db = DatabaseConnection(login, password)
                 self.db.conect()
 
@@ -43,7 +43,9 @@ class CustomApplication(QApplication):
                 setting.setValue('password', password)
                 self.login = login 
                 break
-            except Exception:
+            except Exception as e:
+                print(e)
+                
                 login, password = None, None
 
 
@@ -75,6 +77,7 @@ class MainWindow(QMainWindow, CustomLayoutMainWidget):
         Подключение основных кнопок
         """
         self.add_time.clicked.connect(self.add_new_time_zone)
+        self.profil_button.clicked.connect(self.view_profile)
 
 
         """
@@ -83,7 +86,8 @@ class MainWindow(QMainWindow, CustomLayoutMainWidget):
         self.custom_layout = CustomLayoutMainWidget()
         self.central_widget = self.custom_layout.setup_main_layout()
         self.setCentralWidget(self.central_widget)
-        self.custom_layout.button_layout_home_nav.addWidget(self.add_time)
+        self.custom_layout.button_layout_home_nav.addWidget(self.profil_button, 0, 0)
+        self.custom_layout.button_layout_home_nav.addWidget(self.add_time, 0,   1)
         self.create_widget()
 
 
@@ -93,13 +97,17 @@ class MainWindow(QMainWindow, CustomLayoutMainWidget):
         self.stacked_widget = QStackedWidget()
 
         self.add_time_zone = AddTimeZone(self.time_zone)
-        
+        self.profle = MyProfile()
+
         self.stacked_widget.addWidget(self.central_widget)
         self.stacked_widget.addWidget(self.add_time_zone)
+        self.stacked_widget.addWidget(self.profle)
+
 
         self.setCentralWidget(self.stacked_widget)
         self.add_time_zone.main_widget_button.clicked.connect(self.home)
         self.add_time_zone.save_widget_button.clicked.connect(self.save_update_main)
+        self.profle.home_button.clicked.connect(self.home)
         '''
         Первые попытки сделать таймер, для обновления виджетов
         '''
@@ -128,6 +136,9 @@ class MainWindow(QMainWindow, CustomLayoutMainWidget):
     def add_new_time_zone(self):
         # Добавление новых элементов часовых поясов
         self.stacked_widget.setCurrentIndex(1)
+
+    def view_profile(self):
+        self.stacked_widget.setCurrentIndex(2)
 
 
     def create_widget(self):
@@ -171,9 +182,3 @@ class MainWindow(QMainWindow, CustomLayoutMainWidget):
         
 
 
-# if __name__ == '__main__':
-#     app = CustomApplication(sys.argv)
-#     ex = MainWindow(app.db, app.login)
-#     ex.show()
-#     sys.exit(app.exec())
-#     ex.db.exit()
