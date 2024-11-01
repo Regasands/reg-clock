@@ -1,5 +1,6 @@
 import psycopg2
 from datetime import datetime, timezone
+from config.const import DataBd
 
 
 class DatabaseConnection:
@@ -26,12 +27,12 @@ class DatabaseConnection:
         
     def conect(self):
         try:
-            self.conn = psycopg2.connect(
-                dbname = "clock",
-                user = 'postgres',
-                password = '92349234Regqwe!',
-                host = 'localhost',
-                port = '5432'
+            self.conn =  psycopg2.connect(
+                dbname = DataBd.DBNAME,
+                user = DataBd.USER,
+                password = DataBd.PASSWORD,
+                host = DataBd.HOST,
+                port = DataBd.PORT,
             )
             self.cursor = self.conn.cursor()
             if self.check_profile():
@@ -72,5 +73,27 @@ class DatabaseConnection:
             print('Успешное отключение базы данных')
             return True
         except psycopg2.Error as e:
+            print(e)
+            return False
+
+
+class DatabaseUser:
+    def __init__(self):
+        self.con = psycopg2.connect(
+            dbname = DataBd.DBNAME,
+            user = DataBd.USER,
+            password = DataBd.PASSWORD,
+            host = DataBd.HOST,
+            port = DataBd.PORT,
+        )
+        self.cur = self.con.cursor()
+
+    def create_user(self, login, password):
+        query = '''INSERT INTO users(login, password) VALUES (%s, %s)'''
+        try:
+            self.cur.execute(query, (str(login), str(password), ))
+            self.con.commit()
+            return True
+        except Exception as e:
             print(e)
             return False

@@ -5,21 +5,54 @@ import json
 from PyQt6 import uic
 from PyQt6.QtCore import QSettings
 from PyQt6.QtWidgets import QDialog, QApplication, QLineEdit, QDialogButtonBox, QHBoxLayout, QWidget, QCheckBox
-
+from PyQt6.QtWidgets import QMessageBox
 from config.const import TimeZone
+from database.connect_bd import DatabaseUser
 
 
 from project.layout.custom_layout_widget.layout import CustomLayoutAddTimeZone
 
+
 class Register(QDialog):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('project/Layout/ui/register.ui', self)
+        self.buttonBox.accepted.connect(self.accept)  # Обработка кнопки "Вход"
+        self.buttonBox.rejected.connect(self.reject)
+
+    def get_login_password_register(self):
+        return self.enter_login.text(), self.enter_password.text()
+
+
+class Login(QDialog):
     '''
     Диалог Входа пользователя
     '''
     def __init__(self):
         super().__init__()
-        uic.loadUi('project/Layout/ui/register.ui', self)
+        uic.loadUi('project/Layout/ui/login_window.ui', self)
         self.enter_password.setEchoMode(QLineEdit.EchoMode.Password)
+        self.register_button.clicked.connect(self.register)
 
+    def register(self):
+        text = ''
+        while True:
+            register_window = Register()
+
+            if register_window.exec() == QDialog.DialogCode.Accepted:
+                try:
+                    login, password = register_window.get_login_password_register()
+                    if len(login) < 10 and len(password) > 6:
+                        a = DatabaseUser()
+                        a.create_user(login, password)
+                        break
+                    else:
+                        text = f'Введен не правильный формат пароля или логина"'
+                except Exception as e:
+                    text = f'Произошла ошибка!! {e}'
+                    print(e)
+            else:
+                break
     def get_login_password(self):
         return self.enter_login.text(),  self.enter_password.text()
 
@@ -101,6 +134,6 @@ class AddTimeZone(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = AddTimeZone()
+    ex = Login()
     ex.show()
     sys.exit(app.exec())

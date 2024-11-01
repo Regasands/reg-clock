@@ -127,3 +127,11 @@ class TimeZone:
         "Австралия/Перт": "+8:00",
         "Филиппины/Себу": "+8:00"
     }
+
+
+class DataBd:
+    DBNAME = "clock"
+    USER = 'postgres'
+    PASSWORD = '92349234Regqwe!'
+    HOST = 'localhost'
+    PORT = '5432'

@@ -71,7 +71,7 @@ def create_table(cursor, number):
 
 con = connect_to_bd()
 cursor = con.cursor()
-# create_table(cursor, 4)
-create_table_for_time_zone(cursor)
+create_table(cursor, 4)
+# create_table_for_time_zone(cursor)
 con.commit()
 # print('not error')

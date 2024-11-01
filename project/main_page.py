@@ -9,7 +9,7 @@ from PyQt6.QtGui import QPainter
 from PyQt6.QtCore import QSettings, Qt, QTimer
 
 from database.connect_bd import DatabaseConnection
-from project.dialogs import Register, AddTimeZone
+from project.dialogs import Login, AddTimeZone
 from project.draw import custom_widget
 from project.layout.custom_layout_widget.layout import CustomLayoutMainWidget
 from config.decorators import format_date
@@ -28,9 +28,9 @@ class CustomApplication(QApplication):
 
         while True:
             if not login or not password:
-                    register_dialog = Register()
-                    if register_dialog.exec():
-                        login, password = register_dialog.get_login_password()
+                    login_window = Login()
+                    if login_window.exec():
+                        login, password = Login.get_login_password()
                     else:
                         sys.exit()
 
