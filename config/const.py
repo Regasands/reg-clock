@@ -132,6 +132,6 @@ class TimeZone:
 class DataBd:
     DBNAME = "clock"
     USER = 'postgres'
-    PASSWORD = 'СЕКРЕТ'
+    PASSWORD = '92349234Regqwe!'
     HOST = 'localhost'
     PORT = '5432'

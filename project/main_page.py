@@ -13,7 +13,7 @@ from project.dialogs import Login, AddTimeZone
 from project.draw import custom_widget
 from project.layout.custom_layout_widget.layout import CustomLayoutMainWidget
 from config.decorators import format_date
-from project.to_main_window_for_friends import MyProfile
+from project.window_friends import MyProfile, CreateClock
 
 class CustomApplication(QApplication):
     '''
@@ -25,7 +25,6 @@ class CustomApplication(QApplication):
         setting = QSettings('23', "Reg'clock")
         login = setting.value('username', None)
         password = setting.value('password', None)
-        login, password = None, None
 
         while True:
             if not login or not password:
@@ -97,17 +96,20 @@ class MainWindow(QMainWindow, CustomLayoutMainWidget):
         self.stacked_widget = QStackedWidget()
 
         self.add_time_zone = AddTimeZone(self.time_zone)
-        self.profle = MyProfile()
+        self.profle = MyProfile(self)
+        self.create_clock = CreateClock(self)
 
         self.stacked_widget.addWidget(self.central_widget)
         self.stacked_widget.addWidget(self.add_time_zone)
         self.stacked_widget.addWidget(self.profle)
+        self.stacked_widget.addWidget(self.create_clock)
 
 
         self.setCentralWidget(self.stacked_widget)
         self.add_time_zone.main_widget_button.clicked.connect(self.home)
         self.add_time_zone.save_widget_button.clicked.connect(self.save_update_main)
         self.profle.home_button.clicked.connect(self.home)
+        # self.create_clock.home_button.clicked.connect(self.home)
         '''
         Первые попытки сделать таймер, для обновления виджетов
         '''

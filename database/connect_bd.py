@@ -76,6 +76,19 @@ class DatabaseConnection:
             print(e)
             return False
 
+    def set_alarm_clock(self, date, text, unical=True, topic=''):
+        if not topic:
+            topic = text[:10]
+        try:
+            id_user = self.cursor.execute('''SELECT id FROM users WHERE login = %s''', (self.login, ))
+            id_user = self.cursor.fetchone()[0]
+            query = '''INSERT INTO alarm_clock(user_own, alarm_clock_date, alarm_clock_name, unical, topic) VALUES(%s, %s, %s, %s, %s)'''
+            self.cursor.execute(query, (id_user, date, text, unical, topic))
+            self.conn.commit()
+        except Exception as e:
+            print(e)
+
+
 
 class DatabaseUser:
     def __init__(self):
@@ -97,3 +110,10 @@ class DatabaseUser:
         except Exception as e:
             print(e)
             return False
+
+
+test_1 = DatabaseConnection('reg', '123')
+test_1.conect()
+i = ['', 'ФФФФ', 'LOX', 'no pls']
+for w in i:
+    test_1.set_alarm_clock( datetime.now(), 'Тест_1 проверяю корректность заполнения()', True if w != 'no pls' else False, w)

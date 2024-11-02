@@ -105,3 +105,8 @@ class CustomLayoutProfile(ParentLayout):
         main_layout.addWidget(self.scrol)
         main_layout.addLayout(self.button_layout_home_nav)
         return main_layout
+
+
+
+class CustomLayoutAddClock(ParentLayout):
+    pass

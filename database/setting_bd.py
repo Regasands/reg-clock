@@ -1,5 +1,5 @@
 import psycopg2
-
+from config.const import DataBd
 
 def connect_to_bd():
     try:
@@ -27,10 +27,11 @@ def create_table(cursor, number):
     elif number == 2:
         query = '''
         CREATE TABLE alarm_clock(
-        user_own VARCHAR(100) NOT NULL,
-        FOREIGN KEY (user_own) REFERENCES users (login) ON DELETE SET NULL,
+        user_own INT REFERENCES users(id) ON DELETE CASCADE,
         alarm_clock_date TIMESTAMP NOT NULL,
-        alarm_clock_name VARCHAR(255)
+        alarm_clock_name TEXT,
+        unical BOOL,
+        topic VARCHAR(255)
         );
         '''
     elif number == 3:
@@ -71,7 +72,7 @@ def create_table(cursor, number):
 
 con = connect_to_bd()
 cursor = con.cursor()
-create_table(cursor, 4)
+create_table(cursor, 2)
 # create_table_for_time_zone(cursor)
 con.commit()
 # print('not error')
