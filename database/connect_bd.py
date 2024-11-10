@@ -10,16 +10,18 @@ class DatabaseConnection:
     def __init__(self, login, password):
         self.conn = None
         self.login = login
+        self.id_user = None
         self.password = password
 
     def check_profile(self):
         query = f'''
-            SELECT password FROM users WHERE login = '{self.login}'
+            SELECT id, password FROM users WHERE login = '{self.login}'
             '''
         self.cursor.execute(query)
         try:
-            result = self.cursor.fetchone()[0]
-            if result == self.password:
+            result = self.cursor.fetchone()
+            self.id_user = result[0]
+            if result[1] == self.password:
                 return True
         except TypeError as e:
             raise TypeError('Данные не верны, такого пользователя не существует')
@@ -45,7 +47,7 @@ class DatabaseConnection:
 
     def get_request (self, query=None):
         query = f'''
-        SELECT alarm_clock_date, alarm_clock_name, user_own FROM alarm_clock WHERE user_own = '{self.login}'
+        SELECT alarm_clock_date, alarm_clock_name, user_own FROM alarm_clock WHERE user_own = {self.id_user}
         '''
         try:
             self.cursor.execute(query)
@@ -54,17 +56,18 @@ class DatabaseConnection:
         except psycopg2.Error as e:
             print(e)
     
-    def set_request(self, date: datetime, query=None, date_name=None):
-        query = f'''
-        INSERT INTO alarm_clock (user_own, alarm_clock_date, alarm_clock_name) VALUES ('{self.login}', '{date}', '{date_name}')
-        '''
-        try:
-            self.cursor.execute(query)
-            self.conn.commit()
-        except psycopg2.Error as e:
-            print(e)
-            self.conn.rollback()
-            return False
+    # def set_request(self, date: datetime, unical, topic, query=None, date_name=None):
+
+    #     query = f'''
+    #     INSERT INTO alarm_clock (user_own, alarm_clock_date, alarm_clock_name, unical, topic) VALUES ('{self.id_user}', {date}, '{date_name}', '{unical}', '{topic}')
+    #     '''
+    #     try:
+    #         self.cursor.execute(query)
+    #         self.conn.commit()
+    #     except psycopg2.Error as e:
+    #         print(e)
+    #         self.conn.rollback()
+    #         return False
 
     def disconect(self):
         try:
@@ -76,17 +79,16 @@ class DatabaseConnection:
             print(e)
             return False
 
-    def set_alarm_clock(self, date, text, unical=True, topic=''):
+    def set_alarm_clock(self, date, text, topic='', unical=True):
         if not topic:
             topic = text[:10]
         try:
-            id_user = self.cursor.execute('''SELECT id FROM users WHERE login = %s''', (self.login, ))
-            id_user = self.cursor.fetchone()[0]
             query = '''INSERT INTO alarm_clock(user_own, alarm_clock_date, alarm_clock_name, unical, topic) VALUES(%s, %s, %s, %s, %s)'''
-            self.cursor.execute(query, (id_user, date, text, unical, topic))
+            self.cursor.execute(query, (self.id_user, str(date), text, unical, topic))
             self.conn.commit()
         except Exception as e:
             print(e)
+            sys.exit()
 
 
 
@@ -112,8 +114,9 @@ class DatabaseUser:
             return False
 
 
-test_1 = DatabaseConnection('reg', '123')
-test_1.conect()
-i = ['', 'ФФФФ', 'LOX', 'no pls']
-for w in i:
-    test_1.set_alarm_clock( datetime.now(), 'Тест_1 проверяю корректность заполнения()', True if w != 'no pls' else False, w)
+
+# test_1 = DatabaseConnection('reg', '123')
+# test_1.conect()
+# i = ['', 'ФФФФ', 'LOX', 'no pls']
+# for w in i:
+#     test_1.set_alarm_clock( datetime.now(), 'Тест_1 проверяю корректность заполнения()', True if w != 'no pls' else False, w)

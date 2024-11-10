@@ -1,7 +1,9 @@
-from PyQt6.QtWidgets import QWidget, QApplication
+from PyQt6.QtWidgets import QWidget, QApplication, QGridLayout, QHBoxLayout, QVBoxLayout, QMessageBox
 from PyQt6.QtGui import QPainter, QPen, QFont, QColor
 from PyQt6.QtCore import Qt, QRectF
+from PyQt6 import uic
 
+import sys
 
 class CustomRiecent(QWidget):
     '''
@@ -38,8 +40,37 @@ class CustomRiecent(QWidget):
         painter.drawText(sub_text, Qt.AlignmentFlag.AlignLeft, f'{self.name}' )
     
 
+class TaskWidget(QWidget):
+    def __init__(self, db, id, date, name, unical, topic, parent):
+        super().__init__()
+        uic.loadUi('project/Layout/ui/task.ui', self)
+        self.db = db
+        self.parent = parent
+        self.tp = topic
+        self.setFixedHeight(100)
+        self.topicLabel.setText(topic)
+        self.topicLabel.adjustSize()
+        self.dateLabel.setText(str(date))
+        self.adjustSize()
+        self.descriptionEdit.setPlainText(str(name))
+        self.descriptionEdit.setEnabled(False)
+        self.pushButton.clicked.connect(self.add_show)
+
+    def add_show(self):
+        try:
+            self.db.cursor.execute(f'''DELETE FROM alarm_clock WHERE user_own = {self.db.id_user} and topic = '{self.tp}' ''')
+            self.db.conn.commit()
+            self.parent.view_tasks_update()
+
+        except Exception as e:
+            print(e)
+
+
+
+        
+
 if __name__ == "__main__":
-    app = QApplication([])
-    window = CustomRiecent()
+    app = QApplication(sys.argv)
+    window = TaskWidget(1, 23, '3wew3gvrijkoevbwvrdvmdvskvdskdvsjkdvsljvklavdsjvskjn kvqjvqvediopcd', '223', '3')
     window.show()
-    app.exec()
+    sys.exit(app.exec())

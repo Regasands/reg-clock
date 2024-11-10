@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QScrollArea
+from PyQt6.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QScrollArea, QHBoxLayout
 from PyQt6.QtCore import Qt
 
 
@@ -88,10 +88,7 @@ class CustomLayoutProfile(ParentLayout):
         return button_box_layout
 
     def create_inner_layout(self):
-        inner_layout = QGridLayout()
-        inner_layout.setHorizontalSpacing(5)
-        inner_layout.setVerticalSpacing(10)
-        inner_layout.setContentsMargins(10, 10, 10, 10)
+        inner_layout = QVBoxLayout()
         return inner_layout
 
     def setup_main_layout(self):

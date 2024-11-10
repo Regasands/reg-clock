@@ -15,6 +15,7 @@ from project.layout.custom_layout_widget.layout import CustomLayoutMainWidget
 from config.decorators import format_date
 from project.window_friends import MyProfile, CreateClock
 
+
 class CustomApplication(QApplication):
     '''
     Проврека на регистрацию перед входом
@@ -109,7 +110,7 @@ class MainWindow(QMainWindow, CustomLayoutMainWidget):
         self.add_time_zone.main_widget_button.clicked.connect(self.home)
         self.add_time_zone.save_widget_button.clicked.connect(self.save_update_main)
         self.profle.home_button.clicked.connect(self.home)
-        # self.create_clock.home_button.clicked.connect(self.home)
+        self.create_clock.home_button.clicked.connect(lambda x: self.home(index_page=2))
         '''
         Первые попытки сделать таймер, для обновления виджетов
         '''
@@ -130,9 +131,9 @@ class MainWindow(QMainWindow, CustomLayoutMainWidget):
         print(self.time_zone)
         
 
-    def home(self):
+    def home(self, index_page=0):
         # Перемещение на главный экран
-        self.stacked_widget.setCurrentIndex(0)
+        self.stacked_widget.setCurrentIndex(index_page)
 
 
     def add_new_time_zone(self):
