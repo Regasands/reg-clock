@@ -1,121 +1,122 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TaskWidget</class>
- <widget class="QWidget" name="TaskWidget">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>200</height>
+    <width>495</width>
+    <height>148</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Task Widget</string>
+   <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string>
-    QWidget {
-     background-color: #F0F0F0; /* Светлый фон */
-    }
-    QLabel {
-     color: #333333; /* Цвет текста */
-    }
-    QPlainTextEdit {
-     border: none;
-     background-color: #FFFFFF; /* Фон поля ввода */
-     color: #333333; /* Цвет текста */
-    }
-    QRadioButton {
-     color: #333333;
-     border: none; 
-    }
-    QPushButton {
-     color: #333333;
-     background-color: #E0E0E0; /* Светло-серый фон кнопки */
-     border: none;
-    }
-   </string>
+   <string notr="true">background-color: white;
+border: 2px solid black;
+</string>
   </property>
-  <layout class="QVBoxLayout" name="mainLayout">
-   <item>
-    <layout class="QVBoxLayout" name="descriptionLayout">
-     <item>
-      <layout class="QHBoxLayout" name="topLayout">
-       <item>
-        <widget class="QLabel" name="topicLabel">
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Topic</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer1">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPlainTextEdit" name="descriptionEdit">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>60</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton">
-       <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <spacer name="horizontalSpacer2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item>
-    <widget class="QLabel" name="dateLabel">
-     <property name="maximumSize">
-      <size>
-       <width>100</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Date</string>
-     </property>
-    </widget>
-   </item>
-  </layout>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>471</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QLabel" name="topicLabel">
+      <property name="maximumSize">
+       <size>
+        <width>100</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 1px solid black;
+color: black;
+</string>
+      </property>
+      <property name="text">
+       <string>Topic</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QPushButton" name="check_description">
+      <property name="styleSheet">
+       <string notr="true">border: 1px solid black;
+color: black;
+</string>
+      </property>
+      <property name="text">
+       <string>ОПИСАНИЕ НАПОМИНАНИЯ</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QPushButton" name="pushButton">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>20</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 1px solid black;
+color: black;
+</string>
+      </property>
+      <property name="text">
+       <string> Удалить </string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0" colspan="2">
+     <widget class="QLabel" name="dateLabel">
+      <property name="minimumSize">
+       <size>
+        <width>200</width>
+        <height>20</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>100</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 1px solid black;
+color: black;
+</string>
+      </property>
+      <property name="text">
+       <string>Date</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0" colspan="2">
+     <widget class="QPlainTextEdit" name="descriptionEdit">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>60</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 1px solid black;
+color: black;
+</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
  </widget>
  <resources/>
  <connections/>

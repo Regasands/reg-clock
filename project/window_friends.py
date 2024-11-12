@@ -54,7 +54,7 @@ class MyProfile(QWidget, CustomLayoutProfile):
         res = self.db.cursor.fetchall()
         for i, e in enumerate(res):
             a = TaskWidget(self.db, db_id, str(e[1]), e[2], e[3], e[4], self)
-            a.setFixedSize(600, 100) 
+            a.setFixedSize(500, 200) 
             self.custom_layout.inner_layout.addWidget(a)
 
     def keyPressEvent(self, event):
@@ -82,22 +82,18 @@ class CreateClock(QWidget):
             try:
                 self.db.set_alarm_clock(dates, descriptions, name, unical)
                 self.parent.stacked_widget.setCurrentIndex(2)
-            except Exception as e:
-                print('r')
+
+            except Execption as e:
                 print(e)
-            
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key.Key_Return:
+            self.save_button_event()
+            self.parent.stacked_widget.setCurrentIndex(2)
+        super().keyPressEvent(event)
         # self.choose_date = self.findChild(QCalendarWidget, "choose_date")
         # self.dateLabel = self.findChild(QLabel, "dateLabel")
 
     # def update_date_label(self):
     #     selected_date = self.choose_date.selectedDate().toString("yyyy-MM-dd")
     #     self.dateLabel.setText(f"Selected Date: {selected_date}")
-
-
-        
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex = MyProfile()
-    ex.show()
-    sys.exit(app.exec())
-    ex.db.exit()

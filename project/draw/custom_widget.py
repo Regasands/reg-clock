@@ -55,6 +55,7 @@ class TaskWidget(QWidget):
         self.descriptionEdit.setPlainText(str(name))
         self.descriptionEdit.setEnabled(False)
         self.pushButton.clicked.connect(self.add_show)
+        self.check_description.clicked.connect(self.check_descriptionn)
 
     def add_show(self):
         try:
@@ -64,6 +65,20 @@ class TaskWidget(QWidget):
 
         except Exception as e:
             print(e)
+
+    def check_descriptionn(self):
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Icon.Information)
+        t = self.descriptionEdit.toPlainText()
+        for i in range(1, len(t) // 70):
+            t = t[i * 70:] + '\n' +  t[i * 70 + 1:] 
+        print(t)
+        msg.setText(t)
+        msg.setWindowTitle("Информация")
+        msg.setStandardButtons(QMessageBox.StandardButton.Ok)
+        msg.exec()
+
+        
 
 
 
