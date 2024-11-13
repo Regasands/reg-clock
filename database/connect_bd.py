@@ -55,6 +55,19 @@ class DatabaseConnection:
             return result
         except psycopg2.Error as e:
             print(e)
+
+    def get_friends(self):
+        query = '''SELECT DISTINCT users.login FROM friends
+        INNER JOIN users on friends.friend_id = users.id
+        WHERE friends.user_id = %s'''
+        try:
+            self.cursor.execute(query, (self.id_user, ))
+            res = self.cursor.fetchall()
+            return res
+        except Exception as e:
+            print('fuck up')
+            print(e)
+
     
     # def set_request(self, date: datetime, unical, topic, query=None, date_name=None):
 
@@ -68,7 +81,6 @@ class DatabaseConnection:
     #         print(e)
     #         self.conn.rollback()
     #         return False
-
     def disconect(self):
         try:
             self.conn.close()

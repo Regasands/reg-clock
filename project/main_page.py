@@ -13,7 +13,7 @@ from project.dialogs import Login, AddTimeZone
 from project.draw import custom_widget
 from project.layout.custom_layout_widget.layout import CustomLayoutMainWidget
 from config.decorators import format_date
-from project.window_friends import MyProfile, CreateClock
+from project.window_friends import MyProfile, CreateClock, ViewTaskFriend
 
 
 class CustomApplication(QApplication):
@@ -26,7 +26,7 @@ class CustomApplication(QApplication):
         setting = QSettings('23', "Reg'clock")
         login = setting.value('username', None)
         password = setting.value('password', None)
-
+        # login, password = None, None
         while True:
             if not login or not password:
                     login_window = Login()
@@ -99,15 +99,18 @@ class MainWindow(QMainWindow, CustomLayoutMainWidget):
         self.add_time_zone = AddTimeZone(self.time_zone)
         self.profle = MyProfile(self)
         self.create_clock = CreateClock(self)
+        self.view_profile = ViewTaskFriend(self)
 
         self.stacked_widget.addWidget(self.central_widget)
         self.stacked_widget.addWidget(self.add_time_zone)
         self.stacked_widget.addWidget(self.profle)
         self.stacked_widget.addWidget(self.create_clock)
+        self.stacked_widget.addWidget(self.view_profile)
 
 
         self.setCentralWidget(self.stacked_widget)
         self.add_time_zone.main_widget_button.clicked.connect(self.home)
+        self.view_profile.home_button.clicked.connect(lambda x: self.home(index_page=2))
         self.add_time_zone.save_widget_button.clicked.connect(self.save_update_main)
         self.profle.home_button.clicked.connect(self.home)
         self.create_clock.home_button.clicked.connect(lambda x: self.home(index_page=2))

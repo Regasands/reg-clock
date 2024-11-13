@@ -3,7 +3,7 @@ import sys
 from datetime import datetime, timedelta
 
 import database
-from PyQt6.QtWidgets import QWidget, QApplication, QCalendarWidget, QLabel
+from PyQt6.QtWidgets import QWidget, QApplication, QCalendarWidget, QLabel, QTableWidgetItem
 from PyQt6.QtWidgets import QMessageBox
 from PyQt6.QtCore import Qt
 from PyQt6 import uic
@@ -35,6 +35,11 @@ class MyProfile(QWidget, CustomLayoutProfile):
 
         '''Обработка событий кнопки'''
         self.add_clock_button.clicked.connect(self.create_new_clock)
+        self.view_friends_button.clicked.connect(self.view_friend)
+
+
+    def view_friend(self):
+        self.parent.stacked_widget.setCurrentIndex(4)
 
     def add_vidget(self):
         pass
@@ -97,3 +102,73 @@ class CreateClock(QWidget):
     # def update_date_label(self):
     #     selected_date = self.choose_date.selectedDate().toString("yyyy-MM-dd")
     #     self.dateLabel.setText(f"Selected Date: {selected_date}")
+
+
+
+
+class ViewTaskFriend(QWidget):
+    '''
+    Виджет для отображения друзей и  их заданий
+    '''
+    def __init__(self,  parent):
+        super().__init__()
+        uic.loadUi('project/Layout/ui/taskfriend.ui', self)
+        self.db = parent.db
+        self.parent = parent
+        self.login.setText(self.db.login)
+        self.login.setEnabled(False)
+        self.password.setText(self.db.password)
+        self.password.setEnabled(False)
+        self.combo_sp = ['Все'] + list(map(lambda x: x[0], self.db.get_friends()))
+        print(self.combo_sp)
+        self.fiend_user.addItems(self.combo_sp)
+        self.create_update_table()
+        self.fiend_user.currentTextChanged.connect(self.changed_table)
+        self.leaveprof.clicked.connect(self.leave_prof)
+
+    def changed_table(self):
+        self.create_update_table()
+
+    def create_update_table(self):
+        self.tableWidget.setRowCount(0)
+        self.combo_sp = ['Все'] + list(map(lambda x: x[0], self.db.get_friends()))
+        log_n = self.fiend_user.currentText()
+        try:
+            if log_n == 'Все':
+                x = tuple(self.combo_sp[1:])
+                print(x)
+                query = '''SELECT users.login, alarm_clock.topic, alarm_clock.alarm_clock_date, alarm_clock.alarm_clock_name
+                FROM users INNER JOIN alarm_clock on  users.id = alarm_clock.user_own WHERE users.login IN %s AND alarm_clock.unical = TRUE'''
+                self.db.cursor.execute(query, (x,))
+            else:
+                query = f'''SELECT users.login, alarm_clock.topic, alarm_clock.alarm_clock_date, alarm_clock.alarm_clock_name
+                FROM users INNER JOIN alarm_clock on  users.id = alarm_clock.user_own WHERE users.login = '{log_n}' AND alarm_clock.unical = TRUE'''
+                self.db.cursor.execute(query)
+            res = self.db.cursor.fetchall()
+        except Exception as e:
+            res = []
+            print(e)
+        print(res)
+        self.tableWidget.setRowCount(len(res))
+        for i, e in enumerate(res):
+            for j, e_2 in enumerate(e):
+                self.tableWidget.setItem(i, j, QTableWidgetItem(str(e_2)))
+
+
+    def leave_prof(self):
+        setting = self.parent.settings
+        setting.setValue('username', None)
+        setting.setValue('password', None)
+        sys.exit()
+        
+
+
+        
+        
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = ViewTaskFriend('E')
+    window.show()
+    sys.exit(app.exec())

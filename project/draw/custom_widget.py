@@ -72,7 +72,6 @@ class TaskWidget(QWidget):
         t = self.descriptionEdit.toPlainText()
         for i in range(1, len(t) // 70):
             t = t[i * 70:] + '\n' +  t[i * 70 + 1:] 
-        print(t)
         msg.setText(t)
         msg.setWindowTitle("Информация")
         msg.setStandardButtons(QMessageBox.StandardButton.Ok)
