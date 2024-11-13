@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QWidget, QApplication, QGridLayout, QHBoxLayout, QVBoxLayout, QMessageBox
-from PyQt6.QtGui import QPainter, QPen, QFont, QColor
-from PyQt6.QtCore import Qt, QRectF
+from PyQt6.QtGui import QPainter, QPen, QFont, QColor, QIcon
+from PyQt6.QtCore import Qt, QRectF, QSize
 from PyQt6 import uic
 
 import sys
@@ -77,7 +77,29 @@ class TaskWidget(QWidget):
         msg.setStandardButtons(QMessageBox.StandardButton.Ok)
         msg.exec()
 
-        
+
+class ViewSoloRequest(QWidget):
+    def __init__(self, parent, text):
+        super().__init__()
+        uic.loadUi('project/layout/ui/request.ui', self)
+        icon_rej = QIcon('project/draw/svg/reject.png')
+        icon_add = QIcon('project/draw/svg/add.png')
+        self.img_b.setIcon(icon_rej)
+        self.img_b.setIconSize(QSize(64, 64))
+        self.img_b2.setIcon(icon_add)
+        self.img_b2.setIconSize(QSize(25, 25))
+        self.img_b.clicked.connect(self.reject)
+        self.img_b2.clicked.connect(self.secses)
+        self.label.setText(text)
+        self.text = text
+        self.label.adjustSize()
+        self.parent = parent
+
+    def secses(self):
+        self.parent.accept_or_del_request(self.text, False)
+
+    def reject(self):
+        self.parent.accept_or_del_request(self.text, True)
 
 
 
@@ -85,6 +107,6 @@ class TaskWidget(QWidget):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = TaskWidget(1, 23, '3wew3gvrijkoevbwvrdvmdvskvdskdvsjkdvsljvklavdsjvskjn kvqjvqvediopcd', '223', '3')
+    window = ViewSoloRequest('3wew3gvrijkoevbwvrdvmdvskvdskdvsjkdvsljvklavdsjvskjn kvqjvqvediopcd')
     window.show()
     sys.exit(app.exec())

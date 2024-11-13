@@ -4,15 +4,15 @@ from datetime import datetime, timedelta
 
 import database
 from PyQt6.QtWidgets import QWidget, QApplication, QCalendarWidget, QLabel, QTableWidgetItem
-from PyQt6.QtWidgets import QMessageBox
+from PyQt6.QtWidgets import QMessageBox, QSizePolicy
 from PyQt6.QtCore import Qt
 from PyQt6 import uic
 
 
-from project.layout.custom_layout_widget.layout import CustomLayoutProfile
-from project.draw.custom_widget import TaskWidget
+from project.layout.custom_layout_widget.layout import CustomLayoutProfile, CustomLayotRequest
+from project.draw.custom_widget import TaskWidget, ViewSoloRequest
 
-class MyProfile(QWidget, CustomLayoutProfile):
+class MyProfile(QWidget):
     def __init__(self, parent=None):
         super().__init__()
         uic.loadUi('project/Layout/ui/profile.ui', self)
@@ -36,13 +36,16 @@ class MyProfile(QWidget, CustomLayoutProfile):
         '''Обработка событий кнопки'''
         self.add_clock_button.clicked.connect(self.create_new_clock)
         self.view_friends_button.clicked.connect(self.view_friend)
-
+        self.check_request_button.clicked.connect(self.check_request)
 
     def view_friend(self):
         self.parent.stacked_widget.setCurrentIndex(4)
 
     def add_vidget(self):
         pass
+
+    def check_request(self):
+        self.parent.stacked_widget.setCurrentIndex(5)
 
     def create_new_clock(self):
         self.parent.stacked_widget.setCurrentIndex(3)
@@ -59,7 +62,7 @@ class MyProfile(QWidget, CustomLayoutProfile):
         res = self.db.cursor.fetchall()
         for i, e in enumerate(res):
             a = TaskWidget(self.db, db_id, str(e[1]), e[2], e[3], e[4], self)
-            a.setFixedSize(500, 200) 
+            a.setStyleSheet("margin: 0px; padding: 0px;")
             self.custom_layout.inner_layout.addWidget(a)
 
     def keyPressEvent(self, event):
@@ -104,8 +107,6 @@ class CreateClock(QWidget):
     #     self.dateLabel.setText(f"Selected Date: {selected_date}")
 
 
-
-
 class ViewTaskFriend(QWidget):
     '''
     Виджет для отображения друзей и  их заданий
@@ -148,7 +149,6 @@ class ViewTaskFriend(QWidget):
         except Exception as e:
             res = []
             print(e)
-        print(res)
         self.tableWidget.setRowCount(len(res))
         for i, e in enumerate(res):
             for j, e_2 in enumerate(e):
@@ -160,12 +160,64 @@ class ViewTaskFriend(QWidget):
         setting.setValue('username', None)
         setting.setValue('password', None)
         sys.exit()
-        
 
 
-        
-        
+class ViewRequest(QWidget):
+    def __init__(self, parent):
+        super().__init__()
+        uic.loadUi('project/layout/ui/request_user.ui', self)
+        self.db = parent.db
+        self.customLayout = CustomLayotRequest(self)
+        main_layout = self.customLayout.setup_main_layout()
+        self.setLayout(main_layout)
+        self.update_tome_request()
+    
+    def update_forme_request(self):
+        '''
+        Запросы которые прислал пользователь
+        '''
+        pass
 
+    def update_tome_request(self):
+        '''
+        Обработка запросов, направленная на меня
+        '''
+        while self.customLayout.in_1.count():
+            item = self.customLayout.in_1.takeAt(0)
+            inner_layout = item.widget()
+            if inner_layout is not None:
+                inner_layout.deleteLater()
+        query = '''SELECT DISTINCT users.login FROM request INNER JOIN users ON request.user_id = users.id WHERE request.friend_id = %s'''
+        try:
+            self.db.cursor.execute(query, (self.db.id_user, ))
+            res = self.db.cursor.fetchall()
+            for e in res:
+                a = ViewSoloRequest(self, e[0])
+                self.customLayout.in_1.addWidget(a)
+        except Exception as e:
+            print(e)
+
+
+    def accept_or_del_request(self, text, bools_d):
+        try:
+            print(text)
+            self.db.cursor.execute(f'''SELECT id FROM users WHERE login = '{text}' ''')
+            id_friend = self.db.cursor.fetchone()[0]
+            if bools_d:
+                query = '''DELETE FROM request WHERE user_id = %s and friend_id = %s'''
+                self.db.cursor.execute(query, (id_friend, self.db.id_user))
+                self.db.conn.commit()
+            else:
+                query = '''INSERT INTO friends(user_id, friend_id) VALUES(%s, %s)'''
+                self.db.cursor.execute(query, (id_friend, self.db.id_user))
+                self.db.conn.commit()
+                self.db.cursor.execute(query, (self.db.id_user, id_friend))
+                self.db.conn.commit()
+
+
+            self.update_tome_request()
+        except Exception as e:
+            print(e)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
