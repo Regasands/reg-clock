@@ -68,19 +68,6 @@ class DatabaseConnection:
             print('fuck up')
             print(e)
 
-    
-    # def set_request(self, date: datetime, unical, topic, query=None, date_name=None):
-
-    #     query = f'''
-    #     INSERT INTO alarm_clock (user_own, alarm_clock_date, alarm_clock_name, unical, topic) VALUES ('{self.id_user}', {date}, '{date_name}', '{unical}', '{topic}')
-    #     '''
-    #     try:
-    #         self.cursor.execute(query)
-    #         self.conn.commit()
-    #     except psycopg2.Error as e:
-    #         print(e)
-    #         self.conn.rollback()
-    #         return False
     def disconect(self):
         try:
             self.conn.close()
@@ -102,8 +89,6 @@ class DatabaseConnection:
             print(e)
             sys.exit()
 
-
-
 class DatabaseUser:
     def __init__(self):
         self.con = psycopg2.connect(
@@ -124,11 +109,3 @@ class DatabaseUser:
         except Exception as e:
             print(e)
             return False
-
-
-
-# test_1 = DatabaseConnection('reg', '123')
-# test_1.conect()
-# i = ['', 'ФФФФ', 'LOX', 'no pls']
-# for w in i:
-#     test_1.set_alarm_clock( datetime.now(), 'Тест_1 проверяю корректность заполнения()', True if w != 'no pls' else False, w)

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1186</width>
-    <height>665</height>
+    <width>1246</width>
+    <height>730</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -50,7 +50,7 @@ border-radius: 5px;</string>
     <string>Home</string>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -129,7 +129,7 @@ border-radius: 5px;</string>
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>60</x>
@@ -146,10 +146,15 @@ border-radius: 5px;</string>
      <number>10</number>
     </property>
     <item row="0" column="0">
-     <widget class="QLineEdit" name="lineEdit"/>
+     <widget class="QLineEdit" name="lineEdit">
+      <property name="styleSheet">
+       <string notr="true">color: black;
+</string>
+      </property>
+     </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="search">
       <property name="styleSheet">
        <string notr="true">color: black;
 </string>
@@ -160,10 +165,20 @@ border-radius: 5px;</string>
      </widget>
     </item>
     <item row="1" column="0">
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="push_request">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="styleSheet">
-       <string notr="true">color: black;
-</string>
+       <string notr="true">QPushButton {
+color: black;
+}
+
+
+QPushButton:disabled {  
+    background-color: #d3d3d3;
+    color: gray; 
+}</string>
       </property>
       <property name="text">
        <string>Send request</string>

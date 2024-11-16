@@ -96,10 +96,30 @@ class ViewSoloRequest(QWidget):
         self.parent = parent
 
     def secses(self):
-        self.parent.accept_or_del_request(self.text, False)
+        self.parent.accept_or_del_request(self.text, False, True)
+        self.parent.accept_or_del_request(self.text, True, True)
+
 
     def reject(self):
-        self.parent.accept_or_del_request(self.text, True)
+        self.parent.accept_or_del_request(self.text, True, True)
+
+class ViewYouRequest(QWidget):
+    def __init__(self, parent, text):
+        super().__init__()
+        uic.loadUi('project/layout/ui/request_your.ui', self)
+        icon_rej = QIcon('project/draw/svg/reject.png')
+        self.img_b.setIcon(icon_rej)
+        self.img_b.setIconSize(QSize(64, 64))
+        self.img_b.clicked.connect(self.reject) 
+        self.label.setText(text)
+        self.text = text
+        self.label.adjustSize()
+        self.parent = parent
+    
+    def reject(self):
+        self.parent.accept_or_del_request(self.text, True, False)
+        
+
 
 
 
@@ -107,6 +127,6 @@ class ViewSoloRequest(QWidget):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = ViewSoloRequest('3wew3gvrijkoevbwvrdvmdvskvdskdvsjkdvsljvklavdsjvskjn kvqjvqvediopcd')
+    window = ViewYouRequest('3wew3gvrijkoevbwvrdvmdvskvdskdvsjkdvsljvklavdsjvskjn kvqjvqvediopcd', 'l')
     window.show()
     sys.exit(app.exec())

@@ -135,3 +135,24 @@ class DataBd:
     PASSWORD = '92349234Regqwe!'
     HOST = 'localhost'
     PORT = '5432'
+
+
+
+class TooLongValue(Exception):
+    pass
+
+
+class YouHaveThisFriend(Exception):
+    pass
+
+
+class BdDontHaveThisUser(Exception):
+    pass
+
+
+class YouHaveThisRequest(Exception):
+    pass
+
+
+class ThisYourLogin(Exception):
+    pass
