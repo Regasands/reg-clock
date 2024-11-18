@@ -2,11 +2,11 @@ import sys
 import json
 from datetime import datetime, timezone, UTC, timedelta
 
-from PyQt6 import uic
+from PyQt6 import uic, QtMultimedia
 from PyQt6.QtWidgets import QWidget, QApplication, QPushButton, QLineEdit, QLabel, QCheckBox, QStackedWidget, QLayout, QStackedWidget
 from PyQt6.QtWidgets import QMainWindow, QInputDialog, QDialog
 from PyQt6.QtGui import QPainter
-from PyQt6.QtCore import QSettings, Qt, QTimer
+from PyQt6.QtCore import QSettings, Qt, QTimer, QUrl
 
 from database.connect_bd import DatabaseConnection
 from project.dialogs import Login, AddTimeZone
@@ -47,8 +47,8 @@ class CustomApplication(QApplication):
                 print(e)
                 
                 login, password = None, None
-
-
+         
+        
 class MainWindow(QMainWindow, CustomLayoutMainWidget):
     '''
     Основное меню
@@ -124,6 +124,19 @@ class MainWindow(QMainWindow, CustomLayoutMainWidget):
         self.timer.timeout.connect(self.update_main_views)
         self.timer.start(10000)
 
+
+        self._audio_output = QtMultimedia.QAudioOutput()
+        self._player = QtMultimedia.QMediaPlayer()
+        self._player.setAudioOutput(self._audio_output)
+        self._audio_output.setVolume(100)
+        self.play_melodiy('project/draw/start_app.mp3')
+
+    def play_melodiy(self, filename):
+        media = QUrl.fromLocalFile(filename)
+        self._player.setSource(media)
+        self._player.play()
+
+    
     def update_main_views(self):
         self.delete_widget_timezone()
         self.create_widget()
