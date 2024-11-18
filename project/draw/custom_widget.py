@@ -1,9 +1,12 @@
+import sys
+
+
+from PyQt6 import uic
 from PyQt6.QtWidgets import QWidget, QApplication, QGridLayout, QHBoxLayout, QVBoxLayout, QMessageBox
 from PyQt6.QtGui import QPainter, QPen, QFont, QColor, QIcon
 from PyQt6.QtCore import Qt, QRectF, QSize
-from PyQt6 import uic
 
-import sys
+
 
 class CustomRiecent(QWidget):
     '''
@@ -41,13 +44,15 @@ class CustomRiecent(QWidget):
     
 
 class TaskWidget(QWidget):
+    '''
+    Отображение твоих заданий
+    '''
     def __init__(self, db, id, date, name, unical, topic, parent):
         super().__init__()
         uic.loadUi('project/Layout/ui/task.ui', self)
         self.db = db
         self.parent = parent
         self.tp = topic
-        self.setFixedHeight(100)
         self.topicLabel.setText(topic)
         self.topicLabel.adjustSize()
         self.dateLabel.setText(str(date))
@@ -103,7 +108,10 @@ class ViewSoloRequest(QWidget):
     def reject(self):
         self.parent.accept_or_del_request(self.text, True, True)
 
+
 class ViewYouRequest(QWidget):
+    '''Отображенрие всех запросов которые относятся к пользователю 
+'''
     def __init__(self, parent, text):
         super().__init__()
         uic.loadUi('project/layout/ui/request_your.ui', self)
@@ -118,11 +126,6 @@ class ViewYouRequest(QWidget):
     
     def reject(self):
         self.parent.accept_or_del_request(self.text, True, False)
-        
-
-
-
-
         
 
 if __name__ == "__main__":

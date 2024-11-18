@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>495</width>
-    <height>162</height>
+    <height>200</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,10 +24,22 @@ border: 2px solid black;
      <x>10</x>
      <y>10</y>
      <width>471</width>
-     <height>131</height>
+     <height>141</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>4</number>
+    </property>
+    <property name="topMargin">
+     <number>4</number>
+    </property>
+    <property name="rightMargin">
+     <number>4</number>
+    </property>
+    <property name="bottomMargin">
+     <number>4</number>
+    </property>
     <item row="0" column="0">
      <widget class="QLabel" name="topicLabel">
       <property name="maximumSize">
@@ -108,9 +120,16 @@ color: black;
         <height>60</height>
        </size>
       </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>60</height>
+       </size>
+      </property>
       <property name="styleSheet">
        <string notr="true">border: 1px solid black;
 color: black;
+height: 60;
 </string>
       </property>
      </widget>

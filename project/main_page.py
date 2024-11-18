@@ -49,7 +49,7 @@ class CustomApplication(QApplication):
                 login, password = None, None
          
         
-class MainWindow(QMainWindow, CustomLayoutMainWidget):
+class MainWindow(QMainWindow,  ):
     '''
     Основное меню
     '''
