@@ -40,7 +40,7 @@ def create_table(cursor, number):
         user_id INT REFERENCES users(id) ON DELETE CASCADE,
         friend_id INT REFERENCES users(id) ON DELETE CASCADE,
         PRIMARY KEY (user_id, friend_id),
-        CHECK (user_id != friend_id))
+        CHECK (user_id != friend_id));
         '''
     elif number == 4:
         query = '''
@@ -48,7 +48,7 @@ def create_table(cursor, number):
         user_id INT REFERENCES users(id) ON DELETE CASCADE,
         friend_id INT REFERENCES users(id) ON DELETE CASCADE,
         PRIMARY KEY (user_id, friend_id),
-        CHECK (user_id != friend_id))
+        CHECK (user_id != friend_id));
         '''
     else:
         raise ValueError('Переданы не правильные параметры')

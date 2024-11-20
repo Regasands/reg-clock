@@ -21,10 +21,9 @@ class TimeZone:
 class DataBd:
     DBNAME = "clock"
     USER = 'postgres'
-    PASSWORD = '92349234Regqwe!'
-    HOST = 'localhost'
+    PASSWORD = 'reg_clock2308'
+    HOST = '194.87.102.160'
     PORT = '5432'
-
 
 
 class TooLongValue(Exception):
