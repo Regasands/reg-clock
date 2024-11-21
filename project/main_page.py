@@ -14,6 +14,7 @@ from project.draw import custom_widget
 from project.layout.custom_layout_widget.layout import CustomLayoutMainWidget
 from config.decorators import format_date
 from project.window_friends import MyProfile, CreateClock, ViewTaskFriend, ViewRequest
+from config.decorators import resource_path
 
 
 class CustomApplication(QApplication):
@@ -56,7 +57,7 @@ class MainWindow(QMainWindow,  ):
     def __init__(self, db, login):
         super().__init__()
         self.move(10, 10)
-        uic.loadUi('project/Layout/ui/main_page.ui', self)
+        uic.loadUi(resource_path('project/layout/ui/main_page.ui'), self)
 
         self.db = db
 
@@ -129,7 +130,7 @@ class MainWindow(QMainWindow,  ):
         self._player = QtMultimedia.QMediaPlayer()
         self._player.setAudioOutput(self._audio_output)
         self._audio_output.setVolume(100)
-        self.play_melodiy('project/draw/start_app.mp3')
+        self.play_melodiy(resource_path('project/draw/start_app.mp3'))
 
     def play_melodiy(self, filename):
         media = QUrl.fromLocalFile(filename)

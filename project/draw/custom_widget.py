@@ -7,6 +7,8 @@ from PyQt6.QtGui import QPainter, QPen, QFont, QColor, QIcon
 from PyQt6.QtCore import Qt, QRectF, QSize
 
 
+from config.decorators import resource_path
+
 
 class CustomRiecent(QWidget):
     '''
@@ -49,7 +51,7 @@ class TaskWidget(QWidget):
     '''
     def __init__(self, db, id, date, name, unical, topic, parent):
         super().__init__()
-        uic.loadUi('project/Layout/ui/task.ui', self)
+        uic.loadUi(resource_path('project/Layout/ui/task.ui'), self)
         self.db = db
         self.parent = parent
         self.tp = topic
@@ -86,9 +88,9 @@ class TaskWidget(QWidget):
 class ViewSoloRequest(QWidget):
     def __init__(self, parent, text):
         super().__init__()
-        uic.loadUi('project/layout/ui/request.ui', self)
-        icon_rej = QIcon('project/draw/svg/reject.png')
-        icon_add = QIcon('project/draw/svg/add.png')
+        uic.loadUi(resource_path('project/layout/ui/request.ui'), self)
+        icon_rej = QIcon(resource_path('project/draw/svg/reject.png'))
+        icon_add = QIcon(resource_path('project/draw/svg/add.png'))
         self.img_b.setIcon(icon_rej)
         self.img_b.setIconSize(QSize(64, 64))
         self.img_b2.setIcon(icon_add)
@@ -114,8 +116,8 @@ class ViewYouRequest(QWidget):
 '''
     def __init__(self, parent, text):
         super().__init__()
-        uic.loadUi('project/layout/ui/request_your.ui', self)
-        icon_rej = QIcon('project/draw/svg/reject.png')
+        uic.loadUi(resource_path('project/layout/ui/request_your.ui'), self)
+        icon_rej = QIcon(resource_path('project/draw/svg/reject.png'))
         self.img_b.setIcon(icon_rej)
         self.img_b.setIconSize(QSize(64, 64))
         self.img_b.clicked.connect(self.reject) 

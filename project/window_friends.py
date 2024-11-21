@@ -12,12 +12,13 @@ from PyQt6 import uic
 from config.const import *
 from project.layout.custom_layout_widget.layout import CustomLayoutProfile, CustomLayotRequest
 from project.draw.custom_widget import TaskWidget, ViewSoloRequest, ViewYouRequest
+from config.decorators import resource_path
 
 
 class MyProfile(QWidget):
     def __init__(self, parent=None):
         super().__init__()
-        uic.loadUi('project/Layout/ui/profile.ui', self)
+        uic.loadUi(resource_path('project/layout/ui/profile.ui'), self)
         self.parent = parent
         self.db = self.parent.db if self.parent.db else None
 
@@ -72,7 +73,7 @@ class CreateClock(QWidget):
         super().__init__()
         self.parent = parent
         self.db = self.parent.db if self.parent.db else None
-        uic.loadUi('project/Layout/ui/create_clock.ui', self)
+        uic.loadUi(resource_path('project/layout/ui/create_clock.ui'), self)
         self.create_button.clicked.connect(self.save_button_event)
 
     def save_button_event(self):
@@ -102,7 +103,7 @@ class ViewTaskFriend(QWidget):
     '''
     def __init__(self,  parent):
         super().__init__()
-        uic.loadUi('project/Layout/ui/taskfriend.ui', self)
+        uic.loadUi(resource_path('project/layout/ui/taskfriend.ui'), self)
         self.db = parent.db
         self.parent = parent
         self.login.setText(self.db.login)
@@ -160,7 +161,7 @@ class ViewRequest(QWidget):
     '''
     def __init__(self, parent):
         super().__init__()
-        uic.loadUi('project/layout/ui/request_user.ui', self)
+        uic.loadUi(resource_path('project/layout/ui/request_user.ui'), self)
         self.db = parent.db
         self.parent = parent
         self.customLayout = CustomLayotRequest(self)
@@ -226,6 +227,9 @@ class ViewRequest(QWidget):
             else:
                 query = '''INSERT INTO friends(user_id, friend_id) VALUES(%s, %s)'''
                 self.db.cursor.execute(query, (self.db.id_user, id_friend))
+                self.db.conn.commit()
+                query = '''INSERT INTO friends(user_id, friend_id) VALUES(%s, %s)'''
+                self.db.cursor.execute(query, (id_friend, self.db.id_user))
                 self.db.conn.commit()
             self.update_forme_request()
             self.update_tome_request()

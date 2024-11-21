@@ -1,5 +1,6 @@
 import csv
-
+import os
+import sys
 
 class Constant:
     PASSWORD = ''
@@ -8,9 +9,15 @@ class Constant:
 #     QUERY_BD = {
 #         'get_alarm': '''SELECT''',
 #     }
+
 class TimeZone:
     ALLTIMEZONE = {}
-    with open('all_timezones.csv', 'r', encoding='utf-8') as f:
+    def get_resource_path(relative_path):
+        if hasattr(sys, '_MEIPASS'):
+            return os.path.join(sys._MEIPASS, relative_path)
+        return os.path.join(os.path.abspath("."), relative_path)
+    file_path = get_resource_path('config/all_timezones.csv')
+    with open(file_path,  'r', encoding='utf-8') as f:
         file = csv.reader(f)
         next(file)  # Пропускаем строку с заголовками
         for row in file:

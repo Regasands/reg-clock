@@ -11,12 +11,13 @@ from database.connect_bd import DatabaseUser
 
 
 from project.layout.custom_layout_widget.layout import CustomLayoutAddTimeZone
+from config.decorators import resource_path
 
 
 class Register(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi('project/Layout/ui/register.ui', self)
+        uic.loadUi(resource_path('project/layout/ui/register.ui'), self)
         self.buttonBox.accepted.connect(self.accept)  # Обработка кнопки "Вход"
         self.buttonBox.rejected.connect(self.reject)
 
@@ -30,7 +31,7 @@ class Login(QDialog):
     '''
     def __init__(self):
         super().__init__()
-        uic.loadUi('project/Layout/ui/login_window.ui', self)
+        uic.loadUi(resource_path('project/layout/ui/login_window.ui'), self)
         self.enter_password.setEchoMode(QLineEdit.EchoMode.Password)
         self.register_button.clicked.connect(self.register)
         self.buttonBox_2.accepted.connect(self.accept)  # Обработка кнопки "Вход"
@@ -67,7 +68,7 @@ class AddTimeZone(QWidget):
     '''
     def __init__(self, time_zone):
         super().__init__()
-        uic.loadUi('project/Layout/ui/add_time_zone02.ui', self)
+        uic.loadUi(resource_path('project/layout/ui/add_time_zone02.ui'), self)
         '''
         Все таже настройка и работа с паметью к сожалению как не дублировать это тминимальный код, я не предумывал,
         считаю что мексины сделают логику приложения более сложной из-за этого подход в данном случае исключаю

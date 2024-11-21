@@ -1,3 +1,6 @@
+import sys
+import os
+
 def check_data(self, func):
     def wrappers(*args, **kwargs):
         if self.conn is None or self.login is None:
@@ -16,3 +19,14 @@ def format_date(date: str) -> str:
     sp.append(date)
     return ' '.join(sp)
     
+
+
+def resource_path(relative_path):
+    """ Возвращает абсолютный путь к ресурсу """
+    try:
+        # PyInstaller создает временную директорию для ресурсов
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.abspath(".")
+    
+    return os.path.join(base_path, relative_path)
